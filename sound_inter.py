@@ -1,4 +1,8 @@
 '''
+Andrew Zhou
+Sheng Tan
+UC Berkeley
+EE 126 Spring 2017 Project
 
 Used Code from
 
@@ -6,6 +10,7 @@ http://stackoverflow.com/questions/2648151/python-frequency-detection
 
 http://stackoverflow.com/questions/2668442/detect-and-record-a-sound-with-python
 
+For educational use--school project.
 '''
 
 # Read in a WAV and find the freq's
