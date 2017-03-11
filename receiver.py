@@ -79,6 +79,6 @@ def receiver(file):
             print "The freq is %f Hz." % (thefreq)
         # read some more data
             i+=1
-if __name__ == 'main':
+if __name__ == '__main__':
     file = readCommand(sys.argv[1])
     receiver(file)

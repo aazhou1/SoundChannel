@@ -39,7 +39,7 @@ def transmit(file_name):
 		generator.play(frequency, step_duration, amplitude)
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
 	file = readCommand(sys.argv[1])
 	transmit(file)
 
