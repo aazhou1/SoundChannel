@@ -13,8 +13,6 @@ Only for educational use for school project.
 '''
 
 
-#! /usr/bin/python
- 
 import numpy
 import pyaudio
 import math

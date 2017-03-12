@@ -26,7 +26,7 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-RECORD_SECONDS = 2.98
+RECORD_SECONDS = 3
 WAVE_OUTPUT_FILENAME = "output.wav"
 
 # use a Blackman window
@@ -54,7 +54,7 @@ i = 0
 while i < len(frames):
     data= frames[i]
     # unpack the data and times by the hamming window
-    indata = np.array(wave.struct.unpack("%dh"%(len(data)/int(RECORD_SECONDS)),\
+    indata = np.array(wave.struct.unpack("%dh"%(len(data)/2),\
         data))*window
     # Take the fft and square each value
     fftData=abs(np.fft.rfft(indata))**2
@@ -72,14 +72,5 @@ while i < len(frames):
         print "The freq is %f Hz." % (thefreq)
     # read some more data
     i+=1
-play=pyaudio.PyAudio()
-stream_play=play.open(format=FORMAT,
-                      channels=CHANNELS,
-                      rate=RATE,
-                      output=True)
-for data in frames: 
-    stream_play.write(data)
-stream_play.stop_stream()
-stream_play.close()
-play.terminate()
+
 

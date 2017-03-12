@@ -80,11 +80,11 @@ class ToneGenerator(object):
  
 generator = ToneGenerator()
  
-frequency_start = 440        # Frequency to start the sweep from
-frequency_end = 440       # Frequency to end the sweep at
-num_frequencies = 1       # Number of frequencies in the sweep
+frequency_start = 500        # Frequency to start the sweep from
+frequency_end = 10000       # Frequency to end the sweep at
+num_frequencies = 200       # Number of frequencies in the sweep
 amplitude = 0.50            # Amplitude of the waveform
-step_duration = 10       # Time (seconds) to play at each step
+step_duration = 0.43        # Time (seconds) to play at each step
  
 for frequency in numpy.logspace(math.log(frequency_start, 10),
                                 math.log(frequency_end, 10),

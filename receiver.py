@@ -80,5 +80,6 @@ def receiver(file):
         # read some more data
             i+=1
 if __name__ == '__main__':
-    file = readCommand(sys.argv[1])
-    receiver(file)
+    while (True):
+        file = readCommand(sys.argv[1])
+        receiver(file)
