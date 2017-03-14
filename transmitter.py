@@ -1,4 +1,4 @@
-'''
+''''
 Andrew Zhou
 Sheng Tan
 UC Berkeley
@@ -15,10 +15,19 @@ import pyaudio
 import numpy
 import math
 
+LOW_FREQ = 2000
+
+HIGH_FREQ = 7000
 #character to frequency translation dictionary
-char_to_freq={}
-for x in range(256):
-	char_to_freq[x] = x*60
+hex_to_freq={}
+for x in range(0,10):
+	hex_to_freq[str(x)] =875 *x + 1000
+hex_to_freq['A'] = 875*10 + 1000 
+hex_to_freq['B'] = 875*11 + 1000 
+hex_to_freq['C'] = 875*12 + 1000 
+hex_to_freq['D'] = 875*13 + 1000 
+hex_to_freq['E'] = 875*14 + 1000 
+hex_to_freq['F'] = 875*15 + 1000 
 
 #read text file data into a string
 def read_file(file_name):
@@ -31,7 +40,12 @@ def read_file(file_name):
 def encode(str):
 	frequencies = []
 	for x in str:
-		frequencies.append(char_to_freq[ord(x)])
+		ascii_key = ord(x)
+		print(x)
+		binary_ascii ="0x%0.2X" % ascii_key
+		frequencies.append(hex_to_freq[binary_ascii[2]])
+		frequencies.append(hex_to_freq[binary_ascii[3]])
+	print(frequencies)
 	return frequencies
 
 def sine(frequency, length, rate):
@@ -40,7 +54,7 @@ def sine(frequency, length, rate):
     return numpy.sin(numpy.arange(length) * factor)
 
 
-def play_tone(stream, frequencies, length=0.025, rate=44100):
+def play_tone(stream, frequencies, length=0.04, rate=44100):
     chunks = []
     for frequency in frequencies:
         chunks.append(sine(frequency, length, rate))

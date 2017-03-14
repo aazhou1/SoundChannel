@@ -20,7 +20,7 @@ import numpy as np
 
 
 
-
+#3-4 readings per bit
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
