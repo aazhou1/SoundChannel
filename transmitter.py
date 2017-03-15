@@ -19,16 +19,16 @@ import time
 #character to frequency translation dictionary
 hex_to_freq={}
 for x in range(0,10):
-	hex_to_freq[str(x)] =int(187.5 *x + 4000)
+	hex_to_freq[str(x)] =int(400 *x + 1000)
 
-hex_to_freq['A'] = int(187.5*11 + 4000 )
-hex_to_freq['B'] = int(187.5*12 + 4000 )
-hex_to_freq['C'] = int(187.5*13 + 4000 )
-hex_to_freq['D'] = int(187.5*14 + 4000 )
-hex_to_freq['E'] = int(187.5*15 + 4000) 
-hex_to_freq['F'] = int(187.5*16 + 4000 )
+hex_to_freq['A'] = int(400*12 + 1000 )
+hex_to_freq['B'] = int(400*13 + 1000 )
+hex_to_freq['C'] = int(400*14 + 1000 )
+hex_to_freq['D'] = int(400*15 + 1000 )
+hex_to_freq['E'] = int(400*16 + 1000) 
+hex_to_freq['F'] = int(400*17 + 1000 )
 
-interm = int(187.5*10+4000)
+interm = int(400*10.5+1000)
 
 #read text file data into a string
 def read_file(file_name):
@@ -57,15 +57,19 @@ def sine(frequency, length, rate):
     return numpy.sin(numpy.arange(length) * factor)
 
 
-def play_tone(stream, frequencies, length=0.042, rate=44100):
-	print("recommended record time is %f", 0.042*len(frequencies)+2)
-	for t in range(30,-1,-1):
+def play_tone(stream, frequencies, length=0.02, rate=44100):
+	print("recommended record time is %f", length*len(frequencies))
+	for t in range(5,-1,-1):
 		print(t)
 		time.sleep(1.0)
 	for frequency in frequencies:
-		chunks= [sine(frequency, length, rate)]
+		if (frequency == 9000):
+			chunks= [sine(frequency, 0.01, rate)]
+		else:
+			chunks = [sine(frequency, length, rate)]
 		chunk = numpy.concatenate(chunks) * 0.25
 		stream.write(chunk.astype(numpy.float32).tostring())
+	print(frequencies)
     
 
 
@@ -80,6 +84,10 @@ def transmit(file_name):
 
 if __name__ == '__main__':
 	file = str(sys.argv[1])
+	now = time.time()
 	transmit(file)
+	future = time.time()
+	print(future-now-5)
+
 
 

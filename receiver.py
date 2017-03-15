@@ -13,25 +13,26 @@ http://stackoverflow.com/questions/2668442/detect-and-record-a-sound-with-python
 For educational use--school project.
 '''
 
-
+from __future__ import division
 import pyaudio
 import wave
 import numpy as np
 import sys
 
+
 freq_to_hex={}
 for x in range(0,10):
-    freq_to_hex[int(187.5 *x + 4000)] =str(x)
+    freq_to_hex[int(400 *x + 1000)] =str(x)
 
-freq_to_hex[int(187.5*11 + 4000)] = 'A'
-freq_to_hex[int(187.5*12 + 4000)] =  'B'
-freq_to_hex[int(187.5*13 + 4000)]  = 'C'
-freq_to_hex[int(187.5*14 + 4000)]= 'D'
-freq_to_hex[int(187.5*15 + 4000)] = 'E'
-freq_to_hex[int(187.5*16 + 4000)]  = 'F'
+freq_to_hex[int(400*12 + 1000)] = 'A'
+freq_to_hex[int(400*13 + 1000)] =  'B'
+freq_to_hex[int(400*14 + 1000)]  = 'C'
+freq_to_hex[int(400*15 + 1000)]= 'D'
+freq_to_hex[int(400*16 + 1000)] = 'E'
+freq_to_hex[int(400*17 + 1000)]  = 'F'
+interm = int(400*10.5+1000)
 
-interm = int(187.5*10+4000)
-print(freq_to_hex.keys())
+
 
 #Write character string to output file
 def write_file(data, filename):
@@ -43,41 +44,43 @@ def write_file(data, filename):
 def decode(sounds):
 
     i = 0 
+    find = []
     start_string = 0
     last_read = 0 
-    interm = 187.5*10+4000
     characters =""
-    while i < len(sounds):
+    while i < len(sounds)-1:
         #waiting for start of text signal from transmitter
 
-        if (abs(9000 - sounds[i]) <= 30) and start_string == 0:
+        if (abs(9000 - sounds[i]) <= 50) and start_string == 0:
 
             start_string = 1
             #iterate until start signal is done
-            while  (abs(9000 - sounds[i+1]) <= 20):
+            while  (abs(9000 - sounds[i+1]) <= 50):
                 i+=1
-            print(sounds[i+1])
             i+=1
          #end for start of text signal from transmitter
-        elif (abs(9000 - sounds[i]) <= 30) and start_string == 1:
+        elif (abs(9000 - sounds[i]) <= 50) and start_string == 1:
             break
 
-        elif (abs(interm - sounds[i]) <= 30) and start_string == 1:
-            while ((abs(interm - sounds[i+1]) <= 20) or (abs(interm - sounds[i+2]) <= 20)):
+        elif (abs(interm - sounds[i]) <= 50) and start_string == 1:
+            while ((abs(interm - sounds[i+1]) <= 50) or (abs(interm - sounds[i+2]) <= 50)):
                 i+=1
             i+=1
         elif start_string == 1:
+            print("hello %f",sounds[i])
             found = 0
-            if (abs(sounds[i+1] - sounds[i]) <= 30) and (abs(sounds[i+2] - sounds[i]) <= 30):
-                for x in range(int(sounds[i]), int(sounds[i])+21):
+            if (abs(sounds[i+1] - sounds[i]) <= 200) and (abs(sounds[i+2] - sounds[i]) <= 200):
+                for x in range(int(sounds[i]), int(sounds[i])+200):
                     if x in freq_to_hex.keys():
                         print(x)
-                        print("success")
+                        find.append(x)
                         characters+=freq_to_hex[x]
+                        print(characters)
                         found = 1
                         break
-            if found == 1:
-                while ((abs(x - sounds[i+1]) <= 30) or (abs(x - sounds[i+2]) <= 30)):
+            if found == 1 and i <len(sounds):
+                while i < len(sounds)-1 and (abs(interm - sounds[i+1]) > 30) :
+                    print("lebron %f", sounds[i])
                     i+=1
             i+=1
         else:
@@ -85,20 +88,21 @@ def decode(sounds):
     output = ""
     i = 0 
     while i < len(characters):
-        output += chr(int(characters[i:i+2],16))
+        output += str(chr(int(characters[i:i+2],16)))
         i+=2
+    print(find)
     return output
 
 
 
-def receiver(file):
+def receiver(file,time):
     #3-4 readings per bit
 
-    CHUNK = 128
+    CHUNK = 100
     FORMAT = pyaudio.paInt16
     CHANNELS = 2
     RATE = 44100
-    RECORD_SECONDS = 53
+    RECORD_SECONDS = time
     WAVE_OUTPUT_FILENAME = "output.wav"
 
     # use a Blackman window
@@ -115,10 +119,11 @@ def receiver(file):
 
     frames = []
 
+
     for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
         data = stream.read(CHUNK) 
         frames.append(data)
-
+    print(len(frames))
     stream.close()
     p.terminate()
 
@@ -140,12 +145,12 @@ def receiver(file):
             # find the frequency and output it
             thefreq = (which+x1)*RATE/CHUNK
             frequencies.append(thefreq)
-            print "The freq is %f Hz." % (thefreq)
+            print("freq is %f", thefreq)
 
         else:
             thefreq = which*RATE/CHUNK
             frequencies.append(thefreq)
-            print "The freq is %f Hz." % (thefreq)
+            print("freq is %f", thefreq)
         # read some more data
         i+=1
     characters = decode(frequencies)
@@ -154,5 +159,21 @@ def receiver(file):
 
 
 if __name__ == '__main__':
+    
     file = str(sys.argv[1])
-    receiver(file)
+    time = int(sys.argv[2])
+    receiver(file,time)
+    to_transmit = open("test.txt","r")
+    standard = to_transmit.read()
+    to_transmit.close()
+    transmitted = open("output.txt","r")
+    data = transmitted.read()
+    transmitted.close()
+    i = 0 
+    correct = 0
+    while i < len(standard) and i<len(data):
+        if standard[i] == data[i]:
+            correct+=1
+        i+=1
+    print("Accuracy rate is %f", correct/i)
+
