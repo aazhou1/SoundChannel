@@ -15,19 +15,19 @@ import pyaudio
 import numpy
 import math
 
-LOW_FREQ = 2000
-
-HIGH_FREQ = 7000
 #character to frequency translation dictionary
 hex_to_freq={}
 for x in range(0,10):
-	hex_to_freq[str(x)] =875 *x + 1000
-hex_to_freq['A'] = 875*10 + 1000 
-hex_to_freq['B'] = 875*11 + 1000 
-hex_to_freq['C'] = 875*12 + 1000 
-hex_to_freq['D'] = 875*13 + 1000 
-hex_to_freq['E'] = 875*14 + 1000 
-hex_to_freq['F'] = 875*15 + 1000 
+	hex_to_freq[str(x)] =187.5 *x + 4000
+
+hex_to_freq['A'] = 187.5*11 + 4000 
+hex_to_freq['B'] = 187.5*12 + 4000 
+hex_to_freq['C'] = 187.5*13 + 4000 
+hex_to_freq['D'] = 187.5*14 + 4000 
+hex_to_freq['E'] = 187.5*15 + 4000 
+hex_to_freq['F'] = 187.5*16 + 4000 
+
+interm = 187.5*10+4000
 
 #read text file data into a string
 def read_file(file_name):
@@ -39,12 +39,16 @@ def read_file(file_name):
 #Translate string into sound frequency array
 def encode(str):
 	frequencies = []
+	frequencies.append(9000)
 	for x in str:
 		ascii_key = ord(x)
 		print(x)
 		binary_ascii ="0x%0.2X" % ascii_key
 		frequencies.append(hex_to_freq[binary_ascii[2]])
+		frequencies.append(interm)
 		frequencies.append(hex_to_freq[binary_ascii[3]])
+		frequencies.append(interm)
+	frequencies.append(9000)
 	print(frequencies)
 	return frequencies
 
@@ -54,7 +58,7 @@ def sine(frequency, length, rate):
     return numpy.sin(numpy.arange(length) * factor)
 
 
-def play_tone(stream, frequencies, length=0.04, rate=44100):
+def play_tone(stream, frequencies, length=0.02, rate=44100):
     chunks = []
     for frequency in frequencies:
         chunks.append(sine(frequency, length, rate))
