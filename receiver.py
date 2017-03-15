@@ -65,15 +65,16 @@ def decode(sounds):
             i+=1
         elif start_string == 1:
             found = 0
-            for x in range(int(sounds[i]), int(sounds[i])+21):
-                if x in freq_to_hex.keys():
-                    print(x)
-                    print("success")
-                    characters+=freq_to_hex[x]
-                    found = 1
-                    break
+            if (abs(sounds[i+1] - sounds[i]) <= 30) and (abs(sounds[i+2] - sounds[i]) <= 30):
+                for x in range(int(sounds[i]), int(sounds[i])+21):
+                    if x in freq_to_hex.keys():
+                        print(x)
+                        print("success")
+                        characters+=freq_to_hex[x]
+                        found = 1
+                        break
             if found == 1:
-                while ((abs(x - sounds[i+1]) <= 20) or (abs(x - sounds[i+2]) <= 20)):
+                while ((abs(x - sounds[i+1]) <= 30) or (abs(x - sounds[i+2]) <= 30)):
                     i+=1
             i+=1
         else:
@@ -94,7 +95,7 @@ def receiver(file):
     FORMAT = pyaudio.paInt16
     CHANNELS = 2
     RATE = 44100
-    RECORD_SECONDS = 8
+    RECORD_SECONDS = 100
     WAVE_OUTPUT_FILENAME = "output.wav"
 
     # use a Blackman window

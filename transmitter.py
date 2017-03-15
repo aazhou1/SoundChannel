@@ -14,6 +14,7 @@ import sys
 import pyaudio
 import numpy
 import math
+import time
 
 #character to frequency translation dictionary
 hex_to_freq={}
@@ -48,7 +49,6 @@ def encode(str):
 		frequencies.append(hex_to_freq[binary_ascii[3]])
 		frequencies.append(interm)
 	frequencies.append(9000)
-	print(frequencies)
 	return frequencies
 
 def sine(frequency, length, rate):
@@ -61,8 +61,10 @@ def play_tone(stream, frequencies, length=0.042, rate=44100):
     chunks = []
     for frequency in frequencies:
         chunks.append(sine(frequency, length, rate))
-
         chunk = numpy.concatenate(chunks) * 0.25
+    for t in range(5,-1,-1):
+    	print t # Python v2 only
+    	time.sleep(1.0)
     stream.write(chunk.astype(numpy.float32).tostring())
 
 
