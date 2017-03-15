@@ -53,12 +53,15 @@ def decode(sounds):
         if (abs(9000 - sounds[i]) <= 30) and start_string == 0:
 
             start_string = 1
+            #iterate until start signal is done
             while  (abs(9000 - sounds[i+1]) <= 20):
                 i+=1
             print(sounds[i+1])
             i+=1
+         #end for start of text signal from transmitter
         elif (abs(9000 - sounds[i]) <= 30) and start_string == 1:
             break
+
         elif (abs(interm - sounds[i]) <= 30) and start_string == 1:
             while ((abs(interm - sounds[i+1]) <= 20) or (abs(interm - sounds[i+2]) <= 20)):
                 i+=1
@@ -95,7 +98,7 @@ def receiver(file):
     FORMAT = pyaudio.paInt16
     CHANNELS = 2
     RATE = 44100
-    RECORD_SECONDS = 100
+    RECORD_SECONDS = 53
     WAVE_OUTPUT_FILENAME = "output.wav"
 
     # use a Blackman window

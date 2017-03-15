@@ -58,14 +58,15 @@ def sine(frequency, length, rate):
 
 
 def play_tone(stream, frequencies, length=0.042, rate=44100):
-    chunks = []
-    for frequency in frequencies:
-        chunks.append(sine(frequency, length, rate))
-        chunk = numpy.concatenate(chunks) * 0.25
-    for t in range(5,-1,-1):
-    	print t # Python v2 only
-    	time.sleep(1.0)
-    stream.write(chunk.astype(numpy.float32).tostring())
+	print("recommended record time is %f", 0.042*len(frequencies)+2)
+	for t in range(30,-1,-1):
+		print(t)
+		time.sleep(1.0)
+	for frequency in frequencies:
+		chunks= [sine(frequency, length, rate)]
+		chunk = numpy.concatenate(chunks) * 0.25
+		stream.write(chunk.astype(numpy.float32).tostring())
+    
 
 
 #Main Function for transmitting data
