@@ -22,11 +22,11 @@ import numpy as np
 
 #3-4 readings per bit
 
-CHUNK = 200
+CHUNK = 180
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-RECORD_SECONDS = 2
+RECORD_SECONDS = 3
 WAVE_OUTPUT_FILENAME = "output.wav"
 
 # use a Blackman window
