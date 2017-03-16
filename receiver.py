@@ -66,12 +66,9 @@ def decode(sounds):
         elif (abs(interm - sounds[i]) <= 50) and start_string == 1:
             if found == 0 and  (abs(interm - sounds[i+1]) <= 50) and (abs(interm - sounds[i+2]) <= 50) and len(unclear_characters) >=3:
                 average = np.mean(unclear_characters)
-                print("average is %f", average)
                 unclear_characters = []
                 for x in range(int(average)-200, int(average)+200):
-                    print("average key search %x",x)
                     if x in freq_to_hex.keys():
-                        print(x)
                         find.append(x)
                         characters+=freq_to_hex[x]
                         break
@@ -83,7 +80,6 @@ def decode(sounds):
             if (abs(sounds[i+1] - sounds[i]) <= 100) and (abs(sounds[i+2] - sounds[i]) <= 100):
                 for x in range(int(sounds[i])-100, int(sounds[i])+100):
                     if x in freq_to_hex.keys():
-                        print(x)
                         find.append(x)
                         characters+=freq_to_hex[x]
                         found = 1
@@ -93,7 +89,6 @@ def decode(sounds):
                 while i < len(sounds)-1 and (abs(interm - sounds[i+1]) > 30) :
                     i+=1
             elif found == 0:
-                print("cant find %f", sounds[i])
                 unclear_characters.append(sounds[i])
                
             i+=1
@@ -110,8 +105,7 @@ def decode(sounds):
         else:
             i+=1
     output = str(output)
-    print(find)
-    print(len(find))
+
     return output
 
 
@@ -184,17 +178,5 @@ if __name__ == '__main__':
     file = str(sys.argv[1])
     time = int(sys.argv[2])
     receiver(file,time)
-    to_transmit = open("test.txt","r")
-    standard = to_transmit.read()
-    to_transmit.close()
-    transmitted = open("output.txt","r")
-    data = transmitted.read()
-    transmitted.close()
-    i = 0 
-    correct = 0
-    while i < len(standard) and i<len(data):
-        if standard[i] == data[i]:
-            correct+=1
-        i+=1
-    print("Accuracy rate is %f", correct/i)
+
 

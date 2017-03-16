@@ -52,8 +52,7 @@ def encode(str):
 		ff.append(hex_to_freq[binary_ascii[3]])
 		frequencies.append(interm)
 	frequencies.append(9000)
-	print(ff)
-	print(len(ff))
+
 	return frequencies
 
 def sine(frequency, length, rate):
