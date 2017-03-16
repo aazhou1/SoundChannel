@@ -40,15 +40,20 @@ def read_file(file_name):
 #Translate string into sound frequency array
 def encode(str):
 	frequencies = []
+	ff = []
 	frequencies.append(9000)
 	for x in str:
 		ascii_key = ord(x)
 		binary_ascii ="0x%0.2X" % ascii_key
 		frequencies.append(hex_to_freq[binary_ascii[2]])
+		ff.append(hex_to_freq[binary_ascii[2]])
 		frequencies.append(interm)
 		frequencies.append(hex_to_freq[binary_ascii[3]])
+		ff.append(hex_to_freq[binary_ascii[3]])
 		frequencies.append(interm)
 	frequencies.append(9000)
+	print(ff)
+	print(len(ff))
 	return frequencies
 
 def sine(frequency, length, rate):

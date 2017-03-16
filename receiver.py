@@ -48,6 +48,7 @@ def decode(sounds):
     start_string = 0
     last_read = 0 
     characters =""
+    unclear_characters = []
     while i < len(sounds)-1:
         #waiting for start of text signal from transmitter
 
@@ -63,34 +64,54 @@ def decode(sounds):
             break
 
         elif (abs(interm - sounds[i]) <= 50) and start_string == 1:
-            while ((abs(interm - sounds[i+1]) <= 50) or (abs(interm - sounds[i+2]) <= 50)):
-                i+=1
-            i+=1
-        elif start_string == 1:
-            print("hello %f",sounds[i])
-            found = 0
-            if (abs(sounds[i+1] - sounds[i]) <= 200) and (abs(sounds[i+2] - sounds[i]) <= 200):
-                for x in range(int(sounds[i]), int(sounds[i])+200):
+            if found == 0 and  (abs(interm - sounds[i+1]) <= 50) and (abs(interm - sounds[i+2]) <= 50) and len(unclear_characters) >=3:
+                average = np.mean(unclear_characters)
+                print("average is %f", average)
+                unclear_characters = []
+                for x in range(int(average)-200, int(average)+200):
+                    print("average key search %x",x)
                     if x in freq_to_hex.keys():
                         print(x)
                         find.append(x)
                         characters+=freq_to_hex[x]
-                        print(characters)
+                        break
+            while ((abs(interm - sounds[i+1]) <= 50) and (abs(interm - sounds[i+2]) <= 50)):
+                i+=2
+            i+=1
+        elif start_string == 1:
+            found = 0
+            if (abs(sounds[i+1] - sounds[i]) <= 100) and (abs(sounds[i+2] - sounds[i]) <= 100):
+                for x in range(int(sounds[i])-100, int(sounds[i])+100):
+                    if x in freq_to_hex.keys():
+                        print(x)
+                        find.append(x)
+                        characters+=freq_to_hex[x]
                         found = 1
                         break
             if found == 1 and i <len(sounds):
+                unclear_characters = []
                 while i < len(sounds)-1 and (abs(interm - sounds[i+1]) > 30) :
-                    print("lebron %f", sounds[i])
                     i+=1
+            elif found == 0:
+                print("cant find %f", sounds[i])
+                unclear_characters.append(sounds[i])
+               
             i+=1
         else:
             i+=1
     output = ""
     i = 0 
     while i < len(characters):
-        output += str(chr(int(characters[i:i+2],16)))
-        i+=2
+        #print(str(chr(int(characters[i:i+2],16))))
+        to_add = eval("0x"+characters[i:i+2])
+        if to_add <= 128:
+            output += str(chr(to_add))
+            i+=2
+        else:
+            i+=1
+    output = str(output)
     print(find)
+    print(len(find))
     return output
 
 
