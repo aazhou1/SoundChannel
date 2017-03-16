@@ -1,10 +1,13 @@
-Sheng Tan, Andrew Zhou
-EE126 UC Berkeley
-Mar.15th 2017
+Project Report
+==================
 
-##Project Report
+##Contributors 
 
-#Abstract
+* Sheng Tan, Andrew Zhou
+* EE126 UC Berkeley
+* Mar.15th 2017
+
+##Abstract
 
 We convert the .txt file into hexadecimal numbers using their ASCII code. Then for each hexadecimal
 number, we correspond one frequency to it (hex * 400 + 1000 Hz for hex< 10, (hex+2)*400 + 1000 Hz
@@ -20,7 +23,8 @@ frequencies until we see a frequency outside of the barrier range. If nothing is
 barrier, we assume that frequency is interrupted and try to calculate the average and fill the location
 with a hex number to prevent misalignment, which destroy the entire decoded txt file.
 
-#Difficulties
+##Difficulties
+
 The biggest difficulty we encountered is definitely making sure that there is no misalignment in our
 decoded file, as misalignment destroy all subsequent decoding. Our first design is that if nothing is
 decodable between every two barriers, we calculate the average of the not decodable frequencies to try
@@ -34,7 +38,8 @@ guarantee, it prevent extreme conditions where the entire file is not readable. 
 sampling speed of the receiver took us some time, because a low sampling speed does not meet the
 requirement of 100 bits per second, whereas the reading is inaccurate when sampling speed is too high.
 
-#Learning
+##Learning
+
 In the implementation of our original design, we encountered numerous problems that deviates from
 our theory. For instance, the microphone of the computer does not detect the frequency well when it is
 above 10000 Hz, so we have to abort some of the range. Assign a unique frequency to every character
